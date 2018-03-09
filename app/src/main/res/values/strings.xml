@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">AlunoOnline</string>
+    <string name="facebook_app_id">2044377369177598</string>
+    <string name="fb_login_protocol_scheme">fb2044377369177598</string>
+</resources>
