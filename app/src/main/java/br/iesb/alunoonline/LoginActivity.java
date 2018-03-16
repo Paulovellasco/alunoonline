@@ -10,6 +10,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -23,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private EditText txtEmail;
     private EditText txtPassword;
+    private CallbackManager callbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         txtEmail = findViewById(R.id.txtEmail);
         txtPassword = findViewById(R.id.txtPw);
 
-        //LOGIN
+        //LOGIN EMAIL
         Button bt = findViewById(R.id.btnLogin);
         bt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,11 +49,40 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        //LOGIN FACEBOOK
+        callbackManager = CallbackManager.Factory.create();
+        LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton.setReadPermissions("email");
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        // App code
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        // App code
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        // App code
+                    }
+            });
+
         TextView tx = findViewById(R.id.txSignIn);
         tx.setOnClickListener(SetListener(SigninActivity.class));
 
         TextView tx2 = findViewById(R.id.txForgotPw);
         tx2.setOnClickListener(SetListener(ForgotPasswordActivity.class));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+        Intent t = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(t);
     }
 
     private void Login(){
@@ -64,6 +99,10 @@ public class LoginActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    private void FacebookLogin(){
+
     }
 
     protected View.OnClickListener SetListener(final Class targetActivity){

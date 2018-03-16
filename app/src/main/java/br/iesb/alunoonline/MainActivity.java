@@ -22,11 +22,8 @@ public class MainActivity extends AppCompatActivity {
         bt.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference("iesb/aluno/" + UUID.randomUUID().toString());
-
-                myRef.child("Curso").setValue("ADM");
-                myRef.child("Nome").setValue("Aluno2");
+                Intent t = new Intent(MainActivity.this, ProfileActivity.class);
+                startActivity(t);
 
             }
         });
